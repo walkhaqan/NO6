@@ -639,6 +639,9 @@ CREATE TABLE `yonghu`  (
   `xingbie` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '性别',
   `touxiang` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '头像',
   `shouji` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '手机',
+  `youxiang` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `tongzhishezhi` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知设置',
+  `tongzhizhuangtai` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '开启' COMMENT '通知状态',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `zhanghao`(`zhanghao`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1745303471253 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户' ROW_FORMAT = Dynamic;
@@ -694,5 +697,35 @@ INSERT INTO `zhenduanbingli` VALUES (10, '2025-03-27 15:44:24', '11111111110', '
 INSERT INTO `zhenduanbingli` VALUES (11, '2025-03-27 16:20:25', '1743063617739', '医生账号1', '19819881111', 'file/1743063623763.docx', '2025-03-27 16:20:17', '11', '13623666666', '<p>111</p>');
 INSERT INTO `zhenduanbingli` VALUES (12, '2025-04-24 15:46:06', '1745480759774', '123', '13646446880', '', '2025-04-24 15:45:59', '123456', '19558692219', '<p>11</p>');
 INSERT INTO `zhenduanbingli` VALUES (13, '2025-05-08 10:16:51', '1746670607518', '123', '13646446880', '', '2025-05-08 10:16:47', '123456', '19558692219', '<p>1</p>');
+
+-- ----------------------------
+-- Table structure for tongzhijilu
+-- ----------------------------
+DROP TABLE IF EXISTS `tongzhijilu`;
+CREATE TABLE `tongzhijilu`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `addtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `tongzhibianhao` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知编号',
+  `yuyuebianhao` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '预约编号',
+  `yishengzhanghao` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '医生账号',
+  `zhanghao` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '用户账号',
+  `tongzhitype` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知类型',
+  `jieshouqudao` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '接收渠道',
+  `jieshoudizhi` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '接收地址',
+  `fasongzhuangtai` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '发送状态',
+  `fasongshijian` datetime(0) NULL DEFAULT NULL COMMENT '发送时间',
+  `chongshicishu` int(11) NULL DEFAULT NULL COMMENT '重试次数',
+  `shibaiyuanyin` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '失败原因',
+  `chulizhuangtai` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '处理状态',
+  `chulishijian` datetime(0) NULL DEFAULT NULL COMMENT '处理时间',
+  `chuliren` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '处理人',
+  `beizhixinxi` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '备注信息',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `tongzhibianhao`(`tongzhibianhao`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '通知记录' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tongzhijilu
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

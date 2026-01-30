@@ -27,8 +27,8 @@ import com.cl.annotation.SysLog;
 import com.cl.entity.YishengyuyueEntity;
 import com.cl.entity.view.YishengyuyueView;
 
-import com.cl.service.NotificationService;
 import com.cl.service.YishengyuyueService;
+import com.cl.service.TongzhijiluService;
 import com.cl.service.TokenService;
 import com.cl.utils.PageUtils;
 import com.cl.utils.R;
@@ -55,10 +55,6 @@ public class YishengyuyueController {
 
 
 
-
-
-    @Autowired
-    private NotificationService notificationService;
 
 
     /**
@@ -195,12 +191,35 @@ public class YishengyuyueController {
             yishengyuyue.setSfsh(sfsh);
             yishengyuyue.setShhf(shhf);
             list.add(yishengyuyue);
-            
-            if("是".equals(sfsh)) {
-                notificationService.sendNotificationForAppointment(yishengyuyue);
-            }
         }
         yishengyuyueService.updateBatchById(list);
+        
+        // 如果审核通过，立即发送所有后续提醒
+        if ("通过".equals(sfsh)) {
+            try {
+                // 注入通知服务
+                TongzhijiluService tongzhijiluService = (TongzhijiluService) com.cl.utils.SpringContextUtil.getBean("tongzhijiluService");
+                
+                for (YishengyuyueEntity yishengyuyue : list) {
+                    // 创建通知记录并发送
+                    boolean result = tongzhijiluService.createNotificationsForAppointment(
+                        yishengyuyue.getYuyuebianhao(),
+                        yishengyuyue.getYishengzhanghao(),
+                        yishengyuyue.getZhanghao(),
+                        yishengyuyue.getShouji(),
+                        yishengyuyue.getYuyueshijian()
+                    );
+                    
+                    if (!result) {
+                        System.err.println("为预约 " + yishengyuyue.getYuyuebianhao() + " 创建通知失败");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return R.error("审核成功，但通知发送失败：" + e.getMessage());
+            }
+        }
+        
         return R.ok();
     }
 

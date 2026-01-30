@@ -87,6 +87,24 @@ public class YonghuEntity<T> implements Serializable {
 					
 	private String shouji;
 	
+	/**
+	 * 邮箱
+	 */
+					
+	private String youxiang;
+	
+	/**
+	 * 通知设置
+	 */
+					
+	private String tongzhishezhi;
+	
+	/**
+	 * 通知状态
+	 */
+					
+	private String tongzhizhuangtai;
+	
 
 	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat
@@ -176,6 +194,43 @@ public class YonghuEntity<T> implements Serializable {
 	 */
 	public String getShouji() {
 		return shouji;
+	}
+	
+	/**
+	 * 设置：邮箱
+	 */
+	public void setYouxiang(String youxiang) {
+		this.youxiang = youxiang;
+	}
+	/**
+	 * 获取：邮箱
+	 */
+	public String getYouxiang() {
+		return youxiang;
+	}
+	/**
+	 * 设置：通知设置
+	 */
+	public void setTongzhishezhi(String tongzhishezhi) {
+		this.tongzhishezhi = tongzhishezhi;
+	}
+	/**
+	 * 获取：通知设置
+	 */
+	public String getTongzhishezhi() {
+		return tongzhishezhi;
+	}
+	/**
+	 * 设置：通知状态
+	 */
+	public void setTongzhizhuangtai(String tongzhizhuangtai) {
+		this.tongzhizhuangtai = tongzhizhuangtai;
+	}
+	/**
+	 * 获取：通知状态
+	 */
+	public String getTongzhizhuangtai() {
+		return tongzhizhuangtai;
 	}
 
 }

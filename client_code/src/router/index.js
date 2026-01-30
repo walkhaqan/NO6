@@ -51,8 +51,9 @@ import chatMessageAdd from '@/views/pages/chatMessage/formAdd'
 import chatFriendList from '@/views/pages/chatFriend/list'
 import chatFriendDetail from '@/views/pages/chatFriend/formModel'
 import chatFriendAdd from '@/views/pages/chatFriend/formAdd'
-import tongzhirecordList from '@/views/pages/tongzhirecord/list'
-import tongzhirecordDetail from '@/views/pages/tongzhirecord/formModel'
+import tongzhijiluList from '@/views/pages/tongzhijilu/list'
+import tongzhijiluDetail from '@/views/pages/tongzhijilu/formModel'
+import tongzhijiluAdd from '@/views/pages/tongzhijilu/formAdd'
 
 const routes = [{
 		path: '/',
@@ -228,11 +229,14 @@ const routes = [{
 			component: chatFriendAdd
 		}
 		, {
-			path: 'tongzhirecordList',
-			component: tongzhirecordList
+			path: 'tongzhijiluList',
+			component: tongzhijiluList
 		}, {
-			path: 'tongzhirecordDetail',
-			component: tongzhirecordDetail
+			path: 'tongzhijiluDetail',
+			component: tongzhijiluDetail
+		}, {
+			path: 'tongzhijiluAdd',
+			component: tongzhijiluAdd
 		}
 		]
 	},
