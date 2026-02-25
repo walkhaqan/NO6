@@ -103,6 +103,26 @@ public class JiuzhentongzhiEntity<T> implements Serializable {
 					
 	private String tongzhibeizhu;
 	
+	/**
+	 * 发送状态：0待发送 1已发送 2发送失败
+	 */
+	private Integer status;
+	
+	/**
+	 * 重试次数
+	 */
+	private Integer retryCount;
+	
+	/**
+	 * 发送渠道：SMS短信 EMAIL邮件 ALL全部
+	 */
+	private String sendChannel;
+	
+	/**
+	 * 失败原因
+	 */
+	private String failReason;
+
 
 	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat
@@ -216,6 +236,54 @@ public class JiuzhentongzhiEntity<T> implements Serializable {
 	 */
 	public String getTongzhibeizhu() {
 		return tongzhibeizhu;
+	}
+	/**
+	 * 设置：发送状态
+	 */
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	/**
+	 * 获取：发送状态
+	 */
+	public Integer getStatus() {
+		return status;
+	}
+	/**
+	 * 设置：重试次数
+	 */
+	public void setRetryCount(Integer retryCount) {
+		this.retryCount = retryCount;
+	}
+	/**
+	 * 获取：重试次数
+	 */
+	public Integer getRetryCount() {
+		return retryCount;
+	}
+	/**
+	 * 设置：发送渠道
+	 */
+	public void setSendChannel(String sendChannel) {
+		this.sendChannel = sendChannel;
+	}
+	/**
+	 * 获取：发送渠道
+	 */
+	public String getSendChannel() {
+		return sendChannel;
+	}
+	/**
+	 * 设置：失败原因
+	 */
+	public void setFailReason(String failReason) {
+		this.failReason = failReason;
+	}
+	/**
+	 * 获取：失败原因
+	 */
+	public String getFailReason() {
+		return failReason;
 	}
 
 }

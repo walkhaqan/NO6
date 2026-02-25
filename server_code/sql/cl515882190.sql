@@ -673,4 +673,52 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+--
+-- Add new columns to yonghu table for notification
+--
+
+ALTER TABLE `yonghu` ADD COLUMN `youxiang` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邮箱' AFTER `shouji`;
+ALTER TABLE `yonghu` ADD COLUMN `duanxin_tongzhi` tinyint(1) DEFAULT '1' COMMENT '短信通知开关 0关闭 1开启' AFTER `youxiang`;
+ALTER TABLE `yonghu` ADD COLUMN `youjian_tongzhi` tinyint(1) DEFAULT '1' COMMENT '邮件通知开关 0关闭 1开启' AFTER `duanxin_tongzhi`;
+
+--
+-- Add new columns to jiuzhentongzhi table for notification status
+--
+
+ALTER TABLE `jiuzhentongzhi` ADD COLUMN `status` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT 'pending' COMMENT '发送状态 pending待发送 success发送成功 failed发送失败' AFTER `tongzhibeizhu`;
+ALTER TABLE `jiuzhentongzhi` ADD COLUMN `retry_count` int(11) DEFAULT '0' COMMENT '重试次数' AFTER `status`;
+ALTER TABLE `jiuzhentongzhi` ADD COLUMN `send_channel` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '发送渠道 SMS短信 EMAIL邮件' AFTER `retry_count`;
+ALTER TABLE `jiuzhentongzhi` ADD COLUMN `fail_reason` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '失败原因' AFTER `send_channel`;
+
+--
+-- Table structure for table `tongzhirizhi` (Notification Log)
+--
+
+DROP TABLE IF EXISTS `tongzhirizhi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tongzhirizhi` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `addtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `tongzhi_id` bigint(20) DEFAULT NULL COMMENT '关联通知ID',
+  `zhanghao` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户账号',
+  `shouji` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '手机号',
+  `youxiang` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邮箱',
+  `send_channel` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '发送渠道 SMS短信 EMAIL邮件',
+  `content` text COLLATE utf8mb4_unicode_ci COMMENT '通知内容',
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT 'pending' COMMENT '发送状态 pending待发送 success发送成功 failed发送失败',
+  `fail_reason` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '失败原因',
+  `retry_count` int(11) DEFAULT '0' COMMENT '重试次数',
+  `send_time` datetime DEFAULT NULL COMMENT '发送时间',
+  `handle_status` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT 'unhandled' COMMENT '处理状态 unhandled未处理 handled已处理',
+  `handle_note` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '处理备注',
+  `handle_time` datetime DEFAULT NULL COMMENT '处理时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_tongzhi_id` (`tongzhi_id`),
+  KEY `idx_zhanghao` (`zhanghao`),
+  KEY `idx_status` (`status`),
+  KEY `idx_handle_status` (`handle_status`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='通知日志';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 -- Dump completed on 2025-04-03  9:58:39

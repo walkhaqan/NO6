@@ -34,6 +34,7 @@ import com.cl.utils.R;
 import com.cl.utils.MPUtil;
 import com.cl.utils.MapUtils;
 import com.cl.utils.CommonUtil;
+import com.cl.service.NotificationService;
 
 /**
  * 医生预约
@@ -47,6 +48,9 @@ import com.cl.utils.CommonUtil;
 public class YishengyuyueController {
     @Autowired
     private YishengyuyueService yishengyuyueService;
+
+    @Autowired
+    private NotificationService notificationService;
 
 
 
@@ -190,6 +194,10 @@ public class YishengyuyueController {
             yishengyuyue.setSfsh(sfsh);
             yishengyuyue.setShhf(shhf);
             list.add(yishengyuyue);
+            
+            if("是".equals(sfsh)) {
+                notificationService.sendNotification(yishengyuyue);
+            }
         }
         yishengyuyueService.updateBatchById(list);
         return R.ok();
