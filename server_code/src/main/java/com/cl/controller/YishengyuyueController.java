@@ -28,6 +28,7 @@ import com.cl.entity.YishengyuyueEntity;
 import com.cl.entity.view.YishengyuyueView;
 
 import com.cl.service.YishengyuyueService;
+import com.cl.service.NotificationService;
 import com.cl.service.TokenService;
 import com.cl.utils.PageUtils;
 import com.cl.utils.R;
@@ -38,8 +39,9 @@ import com.cl.utils.CommonUtil;
 /**
  * 医生预约
  * 后端接口
- * @author 
- * @email 
+ * 
+ * @author
+ * @email
  * @date 2025-03-27 15:44:15
  */
 @RestController
@@ -48,122 +50,106 @@ public class YishengyuyueController {
     @Autowired
     private YishengyuyueService yishengyuyueService;
 
-
-
-
-
-
-
-
+    @Autowired
+    private NotificationService notificationService;
 
     /**
      * 后台列表
      */
     @RequestMapping("/page")
-    public R page(@RequestParam Map<String, Object> params,YishengyuyueEntity yishengyuyue,
-                                                                                                                                            HttpServletRequest request){
-                    String tableName = request.getSession().getAttribute("tableName").toString();
-                                                                        if(tableName.equals("yisheng")) {
-                    yishengyuyue.setYishengzhanghao((String)request.getSession().getAttribute("username"));
-                                    }
-                                                                                                                                        if(tableName.equals("yonghu")) {
-                    yishengyuyue.setZhanghao((String)request.getSession().getAttribute("username"));
-                                    }
-                                                                                                                                                                                EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
-                                                                                                                                                                                                                        
-        
-        
-        PageUtils page = yishengyuyueService.queryPage(params, MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, yishengyuyue), params), params));
+    public R page(@RequestParam Map<String, Object> params, YishengyuyueEntity yishengyuyue,
+            HttpServletRequest request) {
+        String tableName = request.getSession().getAttribute("tableName").toString();
+        if (tableName.equals("yisheng")) {
+            yishengyuyue.setYishengzhanghao((String) request.getSession().getAttribute("username"));
+        }
+        if (tableName.equals("yonghu")) {
+            yishengyuyue.setZhanghao((String) request.getSession().getAttribute("username"));
+        }
+        EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
+
+        PageUtils page = yishengyuyueService.queryPage(params,
+                MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, yishengyuyue), params), params));
         return R.ok().put("data", page);
     }
-
-
-
-
-
-
 
     /**
      * 前端列表
      */
-	@IgnoreAuth
+    @IgnoreAuth
     @RequestMapping("/list")
-    public R list(@RequestParam Map<String, Object> params,YishengyuyueEntity yishengyuyue,
-		HttpServletRequest request){
+    public R list(@RequestParam Map<String, Object> params, YishengyuyueEntity yishengyuyue,
+            HttpServletRequest request) {
         EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
 
-		PageUtils page = yishengyuyueService.queryPage(params, MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, yishengyuyue), params), params));
+        PageUtils page = yishengyuyueService.queryPage(params,
+                MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, yishengyuyue), params), params));
         return R.ok().put("data", page);
     }
 
-	/**
+    /**
      * 列表
      */
     @RequestMapping("/lists")
-    public R list( YishengyuyueEntity yishengyuyue){
-       	EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
-      	ew.allEq(MPUtil.allEQMapPre( yishengyuyue, "yishengyuyue")); 
+    public R list(YishengyuyueEntity yishengyuyue) {
+        EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
+        ew.allEq(MPUtil.allEQMapPre(yishengyuyue, "yishengyuyue"));
         return R.ok().put("data", yishengyuyueService.selectListView(ew));
     }
 
-	 /**
+    /**
      * 查询
      */
     @RequestMapping("/query")
-    public R query(YishengyuyueEntity yishengyuyue){
-        EntityWrapper< YishengyuyueEntity> ew = new EntityWrapper< YishengyuyueEntity>();
- 		ew.allEq(MPUtil.allEQMapPre( yishengyuyue, "yishengyuyue")); 
-		YishengyuyueView yishengyuyueView =  yishengyuyueService.selectView(ew);
-		return R.ok("查询医生预约成功").put("data", yishengyuyueView);
+    public R query(YishengyuyueEntity yishengyuyue) {
+        EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
+        ew.allEq(MPUtil.allEQMapPre(yishengyuyue, "yishengyuyue"));
+        YishengyuyueView yishengyuyueView = yishengyuyueService.selectView(ew);
+        return R.ok("查询医生预约成功").put("data", yishengyuyueView);
     }
-	
+
     /**
      * 后端详情
      */
     @RequestMapping("/info/{id}")
-    public R info(@PathVariable("id") Long id){
+    public R info(@PathVariable("id") Long id) {
         YishengyuyueEntity yishengyuyue = yishengyuyueService.selectById(id);
-		yishengyuyue = yishengyuyueService.selectView(new EntityWrapper<YishengyuyueEntity>().eq("id", id));
+        yishengyuyue = yishengyuyueService.selectView(new EntityWrapper<YishengyuyueEntity>().eq("id", id));
         return R.ok().put("data", yishengyuyue);
     }
 
     /**
      * 前端详情
      */
-	@IgnoreAuth
+    @IgnoreAuth
     @RequestMapping("/detail/{id}")
-    public R detail(@PathVariable("id") Long id){
+    public R detail(@PathVariable("id") Long id) {
         YishengyuyueEntity yishengyuyue = yishengyuyueService.selectById(id);
-		yishengyuyue = yishengyuyueService.selectView(new EntityWrapper<YishengyuyueEntity>().eq("id", id));
+        yishengyuyue = yishengyuyueService.selectView(new EntityWrapper<YishengyuyueEntity>().eq("id", id));
         return R.ok().put("data", yishengyuyue);
     }
-    
-
-
 
     /**
      * 后端保存
      */
     @RequestMapping("/save")
     @SysLog("新增医生预约")
-    public R save(@RequestBody YishengyuyueEntity yishengyuyue, HttpServletRequest request){
-    	//ValidatorUtils.validateEntity(yishengyuyue);
+    public R save(@RequestBody YishengyuyueEntity yishengyuyue, HttpServletRequest request) {
+        // ValidatorUtils.validateEntity(yishengyuyue);
         yishengyuyueService.insert(yishengyuyue);
         return R.ok();
     }
-    
+
     /**
      * 前端保存
      */
     @SysLog("新增医生预约")
     @RequestMapping("/add")
-    public R add(@RequestBody YishengyuyueEntity yishengyuyue, HttpServletRequest request){
-    	//ValidatorUtils.validateEntity(yishengyuyue);
+    public R add(@RequestBody YishengyuyueEntity yishengyuyue, HttpServletRequest request) {
+        // ValidatorUtils.validateEntity(yishengyuyue);
         yishengyuyueService.insert(yishengyuyue);
         return R.ok();
     }
-
-
 
     /**
      * 修改
@@ -171,9 +157,9 @@ public class YishengyuyueController {
     @RequestMapping("/update")
     @Transactional
     @SysLog("修改医生预约")
-    public R update(@RequestBody YishengyuyueEntity yishengyuyue, HttpServletRequest request){
-        //ValidatorUtils.validateEntity(yishengyuyue);
-        yishengyuyueService.updateById(yishengyuyue);//全部更新
+    public R update(@RequestBody YishengyuyueEntity yishengyuyue, HttpServletRequest request) {
+        // ValidatorUtils.validateEntity(yishengyuyue);
+        yishengyuyueService.updateById(yishengyuyue);// 全部更新
         return R.ok();
     }
 
@@ -183,59 +169,56 @@ public class YishengyuyueController {
     @RequestMapping("/shBatch")
     @Transactional
     @SysLog("审核医生预约")
-    public R update(@RequestBody Long[] ids, @RequestParam String sfsh, @RequestParam String shhf){
+    public R update(@RequestBody Long[] ids, @RequestParam String sfsh, @RequestParam String shhf) {
         List<YishengyuyueEntity> list = new ArrayList<YishengyuyueEntity>();
-        for(Long id : ids) {
+        for (Long id : ids) {
             YishengyuyueEntity yishengyuyue = yishengyuyueService.selectById(id);
             yishengyuyue.setSfsh(sfsh);
             yishengyuyue.setShhf(shhf);
             list.add(yishengyuyue);
+
+            // 如果审核通过，立即发送通知
+            if ("是".equals(sfsh)) {
+                notificationService.sendAppointmentSuccessNotification(yishengyuyue);
+            }
         }
         yishengyuyueService.updateBatchById(list);
         return R.ok();
     }
-
-
-    
 
     /**
      * 删除
      */
     @RequestMapping("/delete")
     @SysLog("删除医生预约")
-    public R delete(@RequestBody Long[] ids){
+    public R delete(@RequestBody Long[] ids) {
         yishengyuyueService.deleteBatchIds(Arrays.asList(ids));
         return R.ok();
     }
-    
-	
-
-
-
-
 
     /**
      * （按值统计）
      */
     @RequestMapping("/value/{xColumnName}/{yColumnName}")
-    public R value(@PathVariable("yColumnName") String yColumnName, @PathVariable("xColumnName") String xColumnName,HttpServletRequest request) {
+    public R value(@PathVariable("yColumnName") String yColumnName, @PathVariable("xColumnName") String xColumnName,
+            HttpServletRequest request) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("xColumn", MPUtil.camelToSnake(xColumnName));
         params.put("yColumn", MPUtil.camelToSnake(yColumnName));
         EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
-		String tableName = request.getSession().getAttribute("tableName").toString();
-		if(tableName.equals("yisheng")) {
-            ew.eq("yishengzhanghao", (String)request.getSession().getAttribute("username"));
-		}
-		if(tableName.equals("yonghu")) {
-            ew.eq("zhanghao", (String)request.getSession().getAttribute("username"));
-		}
+        String tableName = request.getSession().getAttribute("tableName").toString();
+        if (tableName.equals("yisheng")) {
+            ew.eq("yishengzhanghao", (String) request.getSession().getAttribute("username"));
+        }
+        if (tableName.equals("yonghu")) {
+            ew.eq("zhanghao", (String) request.getSession().getAttribute("username"));
+        }
         List<Map<String, Object>> result = MPUtil.snakeListToCamel(yishengyuyueService.selectValue(params, ew));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        for(Map<String, Object> m : result) {
-            for(String k : m.keySet()) {
-                if(m.get(k) instanceof Date) {
-                    m.put(k, sdf.format((Date)m.get(k)));
+        for (Map<String, Object> m : result) {
+            for (String k : m.keySet()) {
+                if (m.get(k) instanceof Date) {
+                    m.put(k, sdf.format((Date) m.get(k)));
                 }
             }
         }
@@ -244,16 +227,14 @@ public class YishengyuyueController {
             // 假设 total 总是存在并且是数值类型
             Number total1 = (Number) map1.get("total");
             Number total2 = (Number) map2.get("total");
-            if(total1==null)
-            {
+            if (total1 == null) {
                 total1 = 0;
             }
-            if(total2==null)
-            {
+            if (total2 == null) {
                 total2 = 0;
             }
             String order = request.getParameter("order");
-            if(StringUtils.isNotBlank(order)&&order.equals("desc")){
+            if (StringUtils.isNotBlank(order) && order.equals("desc")) {
                 return Double.compare(total2.doubleValue(), total1.doubleValue());
             }
             return Double.compare(total1.doubleValue(), total2.doubleValue());
@@ -266,27 +247,28 @@ public class YishengyuyueController {
      * （按值统计(多)）
      */
     @RequestMapping("/valueMul/{xColumnName}")
-    public R valueMul(@PathVariable("xColumnName") String xColumnName,@RequestParam String yColumnNameMul, HttpServletRequest request) {
+    public R valueMul(@PathVariable("xColumnName") String xColumnName, @RequestParam String yColumnNameMul,
+            HttpServletRequest request) {
         String[] yColumnNames = MPUtil.camelToSnake(yColumnNameMul).split(",");
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("xColumn", MPUtil.camelToSnake(xColumnName));
-        List<List<Map<String, Object>>> result2 = new ArrayList<List<Map<String,Object>>>();
+        List<List<Map<String, Object>>> result2 = new ArrayList<List<Map<String, Object>>>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
         String tableName = request.getSession().getAttribute("tableName").toString();
-        if(tableName.equals("yisheng")) {
-            ew.eq("yishengzhanghao", (String)request.getSession().getAttribute("username"));
+        if (tableName.equals("yisheng")) {
+            ew.eq("yishengzhanghao", (String) request.getSession().getAttribute("username"));
         }
-        if(tableName.equals("yonghu")) {
-            ew.eq("zhanghao", (String)request.getSession().getAttribute("username"));
+        if (tableName.equals("yonghu")) {
+            ew.eq("zhanghao", (String) request.getSession().getAttribute("username"));
         }
-        for(int i=0;i<yColumnNames.length;i++) {
+        for (int i = 0; i < yColumnNames.length; i++) {
             params.put("yColumn", yColumnNames[i]);
             List<Map<String, Object>> result = MPUtil.snakeListToCamel(yishengyuyueService.selectValue(params, ew));
-            for(Map<String, Object> m : result) {
-                for(String k : m.keySet()) {
-                    if(m.get(k) instanceof Date) {
-                        m.put(k, sdf.format((Date)m.get(k)));
+            for (Map<String, Object> m : result) {
+                for (String k : m.keySet()) {
+                    if (m.get(k) instanceof Date) {
+                        m.put(k, sdf.format((Date) m.get(k)));
                     }
                 }
             }
@@ -299,25 +281,26 @@ public class YishengyuyueController {
      * （按值统计）时间统计类型
      */
     @RequestMapping("/value/{xColumnName}/{yColumnName}/{timeStatType}")
-    public R valueDay(@PathVariable("yColumnName") String yColumnName, @PathVariable("xColumnName") String xColumnName, @PathVariable("timeStatType") String timeStatType,HttpServletRequest request) {
+    public R valueDay(@PathVariable("yColumnName") String yColumnName, @PathVariable("xColumnName") String xColumnName,
+            @PathVariable("timeStatType") String timeStatType, HttpServletRequest request) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("xColumn", MPUtil.camelToSnake(xColumnName));
         params.put("yColumn", MPUtil.camelToSnake(yColumnName));
         params.put("timeStatType", timeStatType);
         EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
         String tableName = request.getSession().getAttribute("tableName").toString();
-        if(tableName.equals("yisheng")) {
-            ew.eq("yishengzhanghao", (String)request.getSession().getAttribute("username"));
+        if (tableName.equals("yisheng")) {
+            ew.eq("yishengzhanghao", (String) request.getSession().getAttribute("username"));
         }
-        if(tableName.equals("yonghu")) {
-            ew.eq("zhanghao", (String)request.getSession().getAttribute("username"));
+        if (tableName.equals("yonghu")) {
+            ew.eq("zhanghao", (String) request.getSession().getAttribute("username"));
         }
         List<Map<String, Object>> result = MPUtil.snakeListToCamel(yishengyuyueService.selectTimeStatValue(params, ew));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        for(Map<String, Object> m : result) {
-            for(String k : m.keySet()) {
-                if(m.get(k) instanceof Date) {
-                    m.put(k, sdf.format((Date)m.get(k)));
+        for (Map<String, Object> m : result) {
+            for (String k : m.keySet()) {
+                if (m.get(k) instanceof Date) {
+                    m.put(k, sdf.format((Date) m.get(k)));
                 }
             }
         }
@@ -328,28 +311,31 @@ public class YishengyuyueController {
      * （按值统计）时间统计类型(多)
      */
     @RequestMapping("/valueMul/{xColumnName}/{timeStatType}")
-    public R valueMulDay(@PathVariable("xColumnName") String xColumnName, @PathVariable("timeStatType") String timeStatType,@RequestParam String yColumnNameMul,HttpServletRequest request) {
+    public R valueMulDay(@PathVariable("xColumnName") String xColumnName,
+            @PathVariable("timeStatType") String timeStatType, @RequestParam String yColumnNameMul,
+            HttpServletRequest request) {
         String[] yColumnNames = MPUtil.camelToSnake(yColumnNameMul).split(",");
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("xColumn", xColumnName);
         params.put("timeStatType", timeStatType);
-        List<List<Map<String, Object>>> result2 = new ArrayList<List<Map<String,Object>>>();
+        List<List<Map<String, Object>>> result2 = new ArrayList<List<Map<String, Object>>>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
         String tableName = request.getSession().getAttribute("tableName").toString();
-        if(tableName.equals("yisheng")) {
-            ew.eq("yishengzhanghao", (String)request.getSession().getAttribute("username"));
+        if (tableName.equals("yisheng")) {
+            ew.eq("yishengzhanghao", (String) request.getSession().getAttribute("username"));
         }
-        if(tableName.equals("yonghu")) {
-            ew.eq("zhanghao", (String)request.getSession().getAttribute("username"));
+        if (tableName.equals("yonghu")) {
+            ew.eq("zhanghao", (String) request.getSession().getAttribute("username"));
         }
-        for(int i=0;i<yColumnNames.length;i++) {
+        for (int i = 0; i < yColumnNames.length; i++) {
             params.put("yColumn", yColumnNames[i]);
-            List<Map<String, Object>> result = MPUtil.snakeListToCamel(yishengyuyueService.selectTimeStatValue(params, ew));
-            for(Map<String, Object> m : result) {
-                for(String k : m.keySet()) {
-                    if(m.get(k) instanceof Date) {
-                        m.put(k, sdf.format((Date)m.get(k)));
+            List<Map<String, Object>> result = MPUtil
+                    .snakeListToCamel(yishengyuyueService.selectTimeStatValue(params, ew));
+            for (Map<String, Object> m : result) {
+                for (String k : m.keySet()) {
+                    if (m.get(k) instanceof Date) {
+                        m.put(k, sdf.format((Date) m.get(k)));
                     }
                 }
             }
@@ -362,49 +348,46 @@ public class YishengyuyueController {
      * 分组统计
      */
     @RequestMapping("/group/{columnName}")
-    public R group(@PathVariable("columnName") String columnName,HttpServletRequest request) {
+    public R group(@PathVariable("columnName") String columnName, HttpServletRequest request) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("column", MPUtil.camelToSnake(columnName));
         EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
         String tableName = request.getSession().getAttribute("tableName").toString();
-        if(tableName.equals("yisheng")) {
-            ew.eq("yishengzhanghao", (String)request.getSession().getAttribute("username"));
+        if (tableName.equals("yisheng")) {
+            ew.eq("yishengzhanghao", (String) request.getSession().getAttribute("username"));
         }
-        if(tableName.equals("yonghu")) {
-            ew.eq("zhanghao", (String)request.getSession().getAttribute("username"));
+        if (tableName.equals("yonghu")) {
+            ew.eq("zhanghao", (String) request.getSession().getAttribute("username"));
         }
         List<Map<String, Object>> result = MPUtil.snakeListToCamel(yishengyuyueService.selectGroup(params, ew));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        for(Map<String, Object> m : result) {
-            for(String k : m.keySet()) {
-                if(m.get(k) instanceof Date) {
-                    m.put(k, sdf.format((Date)m.get(k)));
+        for (Map<String, Object> m : result) {
+            for (String k : m.keySet()) {
+                if (m.get(k) instanceof Date) {
+                    m.put(k, sdf.format((Date) m.get(k)));
                 }
             }
         }
         return R.ok().put("data", result);
     }
 
-
-
-
     /**
      * 总数量
      */
     @RequestMapping("/count")
-    public R count(@RequestParam Map<String, Object> params,YishengyuyueEntity yishengyuyue, HttpServletRequest request){
+    public R count(@RequestParam Map<String, Object> params, YishengyuyueEntity yishengyuyue,
+            HttpServletRequest request) {
         String tableName = request.getSession().getAttribute("tableName").toString();
-        if(tableName.equals("yisheng")) {
-            yishengyuyue.setYishengzhanghao((String)request.getSession().getAttribute("username"));
+        if (tableName.equals("yisheng")) {
+            yishengyuyue.setYishengzhanghao((String) request.getSession().getAttribute("username"));
         }
-        if(tableName.equals("yonghu")) {
-            yishengyuyue.setZhanghao((String)request.getSession().getAttribute("username"));
+        if (tableName.equals("yonghu")) {
+            yishengyuyue.setZhanghao((String) request.getSession().getAttribute("username"));
         }
         EntityWrapper<YishengyuyueEntity> ew = new EntityWrapper<YishengyuyueEntity>();
-        int count = yishengyuyueService.selectCount(MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, yishengyuyue), params), params));
+        int count = yishengyuyueService
+                .selectCount(MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, yishengyuyue), params), params));
         return R.ok().put("data", count);
     }
-
-
 
 }

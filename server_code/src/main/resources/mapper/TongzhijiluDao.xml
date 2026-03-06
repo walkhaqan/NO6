@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cl.dao.TongzhijiluDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cl.entity.TongzhijiluEntity" id="tongzhijiluMap">
+        <result property="yuyuebianhao" column="yuyuebianhao"/>
+        <result property="tongzhileixing" column="tongzhileixing"/>
+        <result property="tongzhineirong" column="tongzhineirong"/>
+        <result property="zhanghao" column="zhanghao"/>
+        <result property="shouji" column="shouji"/>
+        <result property="fasongzhuangtai" column="fasongzhuangtai"/>
+        <result property="chongshicishu" column="chongshicishu"/>
+        <result property="jihuafasongshijian" column="jihuafasongshijian"/>
+        <result property="shijifasongshijian" column="shijifasongshijian"/>
+        <result property="shibaiyuanyin" column="shibaiyuanyin"/>
+        <result property="duquzhuangtai" column="duquzhuangtai"/>
+        <result property="duqushijian" column="duqushijian"/>
+    </resultMap>
+
+    <select id="selectListView"
+		resultType="com.cl.entity.view.TongzhijiluView" >
+
+		SELECT  tongzhijilu.* FROM tongzhijilu  tongzhijilu         
+        <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectView"
+		resultType="com.cl.entity.view.TongzhijiluView" >
+		SELECT * FROM tongzhijilu  tongzhijilu <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<!-- 查询需要重试的通知记录 -->
+	<select id="selectRetryList" resultType="com.cl.entity.TongzhijiluEntity">
+		SELECT * FROM tongzhijilu 
+		WHERE fasongzhuangtai = 3 
+		AND chongshicishu &lt; #{maxRetryCount}
+		AND jihuafasongshijian &lt;= NOW()
+		ORDER BY addtime ASC
+	</select>
+	
+	<!-- 查询用户的未读通知数量 -->
+	<select id="selectUnreadCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM tongzhijilu 
+		WHERE zhanghao = #{zhanghao} 
+		AND duquzhuangtai = 0
+		AND fasongzhuangtai = 2
+	</select>
+
+
+</mapper>
